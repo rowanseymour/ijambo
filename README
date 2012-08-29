@@ -1,0 +1,9 @@
+=================================
+Ijambo SMS Game Readme
+=================================
+
+A simple SMS game where players guess a jumbled Kinyarwanda word with an English clue.
+
+Kinyarwanda words are taken from http://kinyarwanda.net under the Creative Commons 2.0 Licence. 
+
+Uses MongoDB as a backend.
