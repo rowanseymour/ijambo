@@ -9,6 +9,12 @@
 	<version>1.0-SNAPSHOT</version>
 
 	<name>Ijambo SMS Game</name>
+	
+	<scm>
+		<connection>scm:git:git@github.com:rowanseymour/ijambo-sms.git</connection>
+		<developerConnection>scm:git:git@github.com:rowanseymour/ijambo-sms.git</developerConnection>
+		<url>scm:git:git@github.com:rowanseymour/ijambo-sms.git</url>
+	</scm>
 
 	<dependencies>
 		<dependency>
