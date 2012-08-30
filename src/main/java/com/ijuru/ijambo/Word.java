@@ -23,29 +23,29 @@ package com.ijuru.ijambo;
  * A word which can be guessed
  */
 public class Word {
+	
+	public enum Difficulty { 
+		EASY, MEDIUM, HARD;
+		
+		public static Difficulty fromInt(int val) {
+			return (val >= 0 && val <= 2) ? values()[val] : null;
+		}
+	}
 
-	private Integer dictionaryId;
 	private String word;
 	private String meaning;
+	private Difficulty difficulty;
 	
 	/**
 	 * Constructs a new word
-	 * @param dictionaryId the dictionary ID
 	 * @param word the word
 	 * @param meaning the meaning
+	 * @param difficulty the difficulty
 	 */
-	public Word(Integer dictionaryId, String word, String meaning) {
-		this.dictionaryId = dictionaryId;
+	public Word(String word, String meaning, Difficulty difficulty) {
 		this.word = word;
 		this.meaning = meaning;
-	}
-
-	/**
-	 * Gets the dictionary ID
-	 * @return the dictionary ID
-	 */
-	public Integer getDictionaryId() {
-		return dictionaryId;
+		this.difficulty = difficulty;
 	}
 
 	/**
@@ -62,5 +62,13 @@ public class Word {
 	 */
 	public String getMeaning() {
 		return meaning;
+	}
+	
+	/**
+	 * Gets the difficulty
+	 * @return the difficulty
+	 */
+	public Difficulty getDifficulty() {
+		return difficulty;
 	}
 }

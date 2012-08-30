@@ -34,6 +34,7 @@ import com.ijuru.ijambo.Context;
 import com.ijuru.ijambo.Player;
 import com.ijuru.ijambo.Utils;
 import com.ijuru.ijambo.Word;
+import com.ijuru.ijambo.Word.Difficulty;
 
 /**
  * Main game play servlet
@@ -51,17 +52,33 @@ public class PlayServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String message;	
 		String playerIdentifier = request.getParameter("id");
+		String incoming = request.getParameter("incoming");
 		
 		if (StringUtils.isEmpty(playerIdentifier)) {
 			message = "Player identifier must be provided";
 		}
+		else if (StringUtils.isEmpty(incoming)) {
+			message = "Incoming message must be provided";
+		}
 		else {
+			// Remove keyword from incoming message
+			if (incoming.toLowerCase().startsWith("ijambo "))
+				incoming = incoming.substring(7).trim();
+			
+			// Parse difficulty as a parameter
+			Difficulty difficulty = null;
+			try {
+				difficulty = Difficulty.valueOf(incoming.toUpperCase());
+			}
+			catch (Exception ex) {};
+		
 			Player player = Context.getPlayerDAO().getPlayer(playerIdentifier);
 	
-			Word word = Context.getWordDAO().getRandomWord();
+			Word word = Context.getWordDAO().getRandomWord(difficulty);
 			String scramble = Utils.scrambleWord(word.getWord().toUpperCase());
+			String diffDisplay = StringUtils.capitalize(word.getDifficulty().name().toLowerCase());
 
-			message = "Unscramble " + scramble + " to find '" + word.getMeaning() + "'";
+			message = "[" + diffDisplay + "] unscramble " + scramble + " to find '" + word.getMeaning() + "'";
 			
 			if (player == null) {
 				message += ". Play again to get answer";

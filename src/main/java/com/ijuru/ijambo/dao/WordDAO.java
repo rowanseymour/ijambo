@@ -19,7 +19,11 @@
 
 package com.ijuru.ijambo.dao;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.ijuru.ijambo.Word;
+import com.ijuru.ijambo.Word.Difficulty;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -40,16 +44,55 @@ public class WordDAO {
 	}
 	
 	/**
+	 * Gets the number of words
+	 * @return the number
+	 */
+	public long getWordCount() {
+		return db.getCollection("words").count();
+	}
+	
+	/**
+	 * Gets the number of words with different difficulty levels
+	 * @return map of difficulty levels and counts
+	 */
+	public Map<Difficulty, Integer> getDifficultyCounts() {
+		DBCollection words = db.getCollection("words");
+		Map<Difficulty, Integer> counts = new HashMap<Difficulty, Integer>();
+		
+		for (Difficulty difficulty : Difficulty.values()) {
+			BasicDBObject query = new BasicDBObject();
+			query.put("difficulty", difficulty.ordinal());
+			counts.put(difficulty, words.find(query).count());
+		}
+		
+		return counts;
+	}
+	
+	/**
 	 * Gets a random word
+	 * @param difficulty the difficulty (may be null)
 	 * @return the word
 	 */
-	public Word getRandomWord() {
+	public Word getRandomWord(Difficulty difficulty) {
 		DBCollection words = db.getCollection("words");
+		BasicDBObject obj;
 		
-		int randOffset = (int)(Math.random() * words.count());
-		BasicDBObject obj = (BasicDBObject)words.find().limit(-1).skip(randOffset).next();
+		if (difficulty != null) {
+			// Get count of words of this difficulty
+			BasicDBObject query = new BasicDBObject();
+			query.put("difficulty", difficulty.ordinal());
+			int count = words.find(query).count();
 		
-		return new Word(obj.getInt("dictionaryId"), obj.getString("word"), obj.getString("meaning"));
+			// Pick random one
+			int randOffset = (int)(Math.random() * count);
+			obj = (BasicDBObject)words.find(query).limit(-1).skip(randOffset).next();
+		}
+		else {
+			int randOffset = (int)(Math.random() * words.find().count());
+			obj = (BasicDBObject)words.find().limit(-1).skip(randOffset).next();
+		}
+
+		return new Word(obj.getString("word"), obj.getString("meaning"), Difficulty.fromInt(obj.getInt("difficulty")));
 	}
 	
 	/**
@@ -68,9 +111,9 @@ public class WordDAO {
 		DBCollection words = db.getCollection("words");
 		
 		BasicDBObject obj = new BasicDBObject();
-        obj.put("dictionaryId", word.getDictionaryId());
         obj.put("word", word.getWord());
         obj.put("meaning", word.getMeaning());
+        obj.put("difficulty", word.getDifficulty().ordinal());
         
 		words.insert(obj);
 	}
