@@ -22,20 +22,31 @@ package com.ijuru.ijambo;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.UnknownHostException;
+import java.util.Map;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import au.com.bytecode.opencsv.CSVReader;
 
+import com.ijuru.ijambo.Word.Difficulty;
 import com.ijuru.ijambo.dao.PlayerDAO;
 import com.ijuru.ijambo.dao.WordDAO;
 import com.mongodb.DB;
+import com.mongodb.Mongo;
 
 /**
  * Application context
  */
 public class Context {
 
-	private static final String WORD_FILE = "/words.csv";
+	protected static final Logger log = LogManager.getLogger(Context.class);
 	
+	private static final String WORD_FILE = "/words.csv";
+	private static final String DB_NAME = "ijambo-sms";
+	
+	private static Mongo m;
 	private static WordDAO wordDAO;
 	private static PlayerDAO playerDAO;
 
@@ -56,15 +67,33 @@ public class Context {
 	}
 	
 	/**
-	 * Initializes the database
+	 * Initializes the application
 	 * @throws IOException if the word list could not be read
 	 */
-	public static void initDatabase(DB db) throws IOException {
+	public static void startApplication() throws IOException, UnknownHostException {		
+		m = new Mongo();
 		
+		DB db = m.getDB(DB_NAME);
 		db.getCollection("players").ensureIndex("identifier");
+		
+		Context.setWordDAO(new WordDAO(db));
+		Context.setPlayerDAO(new PlayerDAO(db));
 		
 		// Loads the word list
 		loadWordList();
+		
+		Map<Difficulty, Integer> counts = wordDAO.getDifficultyCounts();
+		log.info("Ijambo started. Loaded " + wordDAO.getWordCount() + 
+				" words (EASY: " + counts.get(Difficulty.EASY) + 
+				" MEDIUM: " + counts.get(Difficulty.MEDIUM) + 
+				" HARD: " + counts.get(Difficulty.HARD) + ")");
+	}
+	
+	/**
+	 * Destroys the application
+	 */
+	public static void destroyApplication() {
+		m.close();
 	}
 	
 	/**
@@ -81,8 +110,8 @@ public class Context {
 	   
 	    // Load each word
 	    while ((nextLine = reader.readNext()) != null) {
-	    	int dictionaryId = Integer.parseInt(nextLine[0]);
-	    	Word word = new Word(dictionaryId, nextLine[1], nextLine[2]);
+	    	Word.Difficulty difficulty = Word.Difficulty.fromInt(Integer.parseInt(nextLine[3]) - 1);
+	    	Word word = new Word(nextLine[1], nextLine[2], difficulty);
 	    	wordDAO.save(word);
 	    }
 	    

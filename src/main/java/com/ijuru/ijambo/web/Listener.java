@@ -29,10 +29,6 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.ijuru.ijambo.Context;
-import com.ijuru.ijambo.dao.PlayerDAO;
-import com.ijuru.ijambo.dao.WordDAO;
-import com.mongodb.DB;
-import com.mongodb.Mongo;
 
 /**
  * Listens for webapp stop/start
@@ -41,27 +37,14 @@ public class Listener implements ServletContextListener {
 
 	protected static final Logger log = LogManager.getLogger(Listener.class);
 	
-	private static final String DB_NAME = "ijambo-sms";
-	
-	private Mongo m;
-	
 	/**
 	 * Web application is being deployed or started
 	 */
 	public void contextInitialized(ServletContextEvent event) {	
 		log.info("Initializing Ijambo SMS");
 		
-		try {
-			m = new Mongo();
-			
-			log.info("Connected to MongoDB instance");
-			
-			DB db = m.getDB(DB_NAME);
-			
-			Context.setWordDAO(new WordDAO(db));
-			Context.setPlayerDAO(new PlayerDAO(db));
-			
-			Context.initDatabase(db);
+		try {		
+			Context.startApplication();
 		}
 		catch (UnknownHostException ex) {
 			log.info("Unable to connect to MongoDB instance", ex);
@@ -77,6 +60,6 @@ public class Listener implements ServletContextListener {
 	public void contextDestroyed(ServletContextEvent event) {
 		log.info("Destroying Ijambo SMS");
 		
-		m.close();
+		Context.destroyApplication();
 	}
 }
