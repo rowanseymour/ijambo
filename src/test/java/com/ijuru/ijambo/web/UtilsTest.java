@@ -19,13 +19,19 @@
 
 package com.ijuru.ijambo.web;
 
+import org.junit.Test;
+
 import com.ijuru.ijambo.Utils;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
-public class UtilsTest extends TestCase {
+/**
+ * Test case for Utils
+ */
+public class UtilsTest {
 
-	public void test_scrambleWord() {
+	@Test
+	public void scrambleWord() {
 		String[] words = { "hello", "salama", "inka", "it" };
 		
 		for (String word : words) {
