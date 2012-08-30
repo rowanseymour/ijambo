@@ -31,8 +31,12 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.ijuru.ijambo.Context;
+import com.ijuru.ijambo.Utils;
 import com.ijuru.ijambo.Word;
 
+/**
+ * Main game play servlet
+ */
 public class PlayServlet extends HttpServlet {
 	
 	protected static final Logger log = LogManager.getLogger(PlayServlet.class);
@@ -47,6 +51,8 @@ public class PlayServlet extends HttpServlet {
 		PrintWriter writer = response.getWriter();
 		Word word = Context.getWordDAO().getRandomWord();
 		
-		writer.write(word.getWord() + " - " + word.getMeaning());
+		String scramble = Utils.scrambleWord(word.getWord().toUpperCase());
+
+		writer.write("Unscramble " + scramble + " to find '" + word.getMeaning() + "'");
 	}
 }
