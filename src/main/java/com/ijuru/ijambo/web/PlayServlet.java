@@ -20,17 +20,18 @@
 package com.ijuru.ijambo.web;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.ijuru.ijambo.Context;
+import com.ijuru.ijambo.Player;
 import com.ijuru.ijambo.Utils;
 import com.ijuru.ijambo.Word;
 
@@ -48,11 +49,34 @@ public class PlayServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PrintWriter writer = response.getWriter();
-		Word word = Context.getWordDAO().getRandomWord();
+		String message;	
+		String playerIdentifier = request.getParameter("id");
 		
-		String scramble = Utils.scrambleWord(word.getWord().toUpperCase());
+		if (StringUtils.isEmpty(playerIdentifier)) {
+			message = "Player identifier must be provided";
+		}
+		else {
+			Player player = Context.getPlayerDAO().getPlayer(playerIdentifier);
+	
+			Word word = Context.getWordDAO().getRandomWord();
+			String scramble = Utils.scrambleWord(word.getWord().toUpperCase());
 
-		writer.write("Unscramble " + scramble + " to find '" + word.getMeaning() + "'");
+			message = "Unscramble " + scramble + " to find '" + word.getMeaning() + "'";
+			
+			if (player == null) {
+				message += ". Play again to get answer";
+				
+				player = new Player(playerIdentifier, word.getWord());
+			}
+			else {
+				message += ". Previous answer: " + player.getPrevAnswer().toUpperCase();
+				
+				player.setPrevAnswer(word.getWord());
+			}
+			
+			Context.getPlayerDAO().save(player);
+		}
+		
+		response.getWriter().write(message);
 	}
 }

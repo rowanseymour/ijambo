@@ -20,7 +20,9 @@
 package com.ijuru.ijambo.dao;
 
 import com.ijuru.ijambo.Player;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
+import com.mongodb.DBCollection;
 
 /**
  * Data access for words
@@ -37,7 +39,50 @@ public class PlayerDAO {
 		this.db = db;
 	}
 	
+	/**
+	 * Gets the specified player
+	 * @param identifier the player identifier
+	 * @return the player
+	 */
 	public Player getPlayer(String identifier) {
-		return null;
+		DBCollection players = db.getCollection("players");
+		
+		BasicDBObject query = new BasicDBObject();
+		query.put("identifier", identifier);
+		
+		BasicDBObject obj = (BasicDBObject)players.findOne(query);
+		if (obj != null)
+			return new Player(obj.getString("identifier"), obj.getString("prevAnswer"));
+		else
+			return null;
+	}
+	
+	/**
+	 * Saves a player
+	 * @param player the player
+	 */
+	public void save(Player player) {
+		DBCollection players = db.getCollection("players");
+		
+		remove(player);
+		
+		BasicDBObject obj = new BasicDBObject();
+		obj.put("identifier", player.getIdentifier());
+		obj.put("prevAnswer", player.getPrevAnswer());
+		
+		players.insert(obj);
+	}
+	
+	/**
+	 * Removes a player
+	 * @param player the player
+	 */
+	public void remove(Player player) {
+		DBCollection players = db.getCollection("players");
+		
+		BasicDBObject query = new BasicDBObject();
+		query.put("identifier", player.getIdentifier());
+		
+		players.findAndRemove(query);
 	}
 }

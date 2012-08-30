@@ -20,19 +20,20 @@
 package com.ijuru.ijambo;
 
 /**
- * A player - anyone who has used the game
+ * Player - anyone who has used the game
  */
 public class Player {
 
 	private String identifier;
-	private Integer lastWord;
+	private String prevAnswer;
 	
-	public Player(String identifier, Integer lastWord) {
+	public Player(String identifier, String prevAnswer) {
 		this.identifier = identifier;
-		this.lastWord = lastWord;
+		this.prevAnswer = prevAnswer;
 	}
 	
 	/**
+	 * Gets the identifier
 	 * @return the identifier
 	 */
 	public String getIdentifier() {
@@ -40,16 +41,17 @@ public class Player {
 	}
 
 	/**
-	 * @return the lastWord
+	 * Gets the answer to the player's previous game
+	 * @return the previous answer
 	 */
-	public Integer getLastWord() {
-		return lastWord;
+	public String getPrevAnswer() {
+		return prevAnswer;
 	}
 
 	/**
-	 * @param lastWord the lastWord to set
+	 * @param prevAnswer the previous game answer
 	 */
-	public void setLastWord(Integer lastWord) {
-		this.lastWord = lastWord;
+	public void setPrevAnswer(String prevAnswer) {
+		this.prevAnswer = prevAnswer;
 	}
 }
