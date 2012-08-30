@@ -20,8 +20,6 @@
 package com.ijuru.ijambo.web;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.UnknownHostException;
 
 import javax.servlet.ServletContextEvent;
@@ -30,10 +28,7 @@ import javax.servlet.ServletContextListener;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.ijuru.ijambo.Context;
-import com.ijuru.ijambo.Word;
 import com.ijuru.ijambo.dao.PlayerDAO;
 import com.ijuru.ijambo.dao.WordDAO;
 import com.mongodb.DB;
@@ -47,7 +42,6 @@ public class Listener implements ServletContextListener {
 	protected static final Logger log = LogManager.getLogger(Listener.class);
 	
 	private static final String DB_NAME = "ijambo-sms";
-	private static final String WORD_FILE = "/words.csv";
 	
 	private Mongo m;
 	
@@ -67,7 +61,7 @@ public class Listener implements ServletContextListener {
 			Context.setWordDAO(new WordDAO(db));
 			Context.setPlayerDAO(new PlayerDAO(db));
 			
-			loadWordList();		
+			Context.loadWordList();		
 		}
 		catch (UnknownHostException ex) {
 			log.info("Unable to connect to MongoDB instance", ex);
@@ -75,29 +69,6 @@ public class Listener implements ServletContextListener {
 		catch (IOException ex) {
 			log.info("Unable to load word list", ex);
 		}
-	}
-	
-	/**
-	 * Loads the wordlist from the embedded CSV
-	 * @param db the mongo DB
-	 * @throws IOException if the file could not be read
-	 */
-	public void loadWordList() throws IOException {
-		InputStream words = Listener.class.getResourceAsStream(WORD_FILE);
-		CSVReader reader = new CSVReader(new InputStreamReader(words));
-	    String[] nextLine;
-	    
-	    // Clear existing words
-	    Context.getWordDAO().removeAll();
-	   
-	    // Load each word
-	    while ((nextLine = reader.readNext()) != null) {
-	    	int dictionaryId = Integer.parseInt(nextLine[0]);
-	    	Word word = new Word(dictionaryId, nextLine[1], nextLine[2]);
-	    	Context.getWordDAO().save(word);
-	    }
-	    
-	    reader.close();
 	}
 	
 	/**
