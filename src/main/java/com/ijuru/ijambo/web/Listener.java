@@ -61,7 +61,7 @@ public class Listener implements ServletContextListener {
 			Context.setWordDAO(new WordDAO(db));
 			Context.setPlayerDAO(new PlayerDAO(db));
 			
-			Context.loadWordList();		
+			Context.initDatabase(db);
 		}
 		catch (UnknownHostException ex) {
 			log.info("Unable to connect to MongoDB instance", ex);
@@ -76,5 +76,7 @@ public class Listener implements ServletContextListener {
 	 */
 	public void contextDestroyed(ServletContextEvent event) {
 		log.info("Destroying Ijambo SMS");
+		
+		m.close();
 	}
 }

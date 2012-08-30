@@ -27,7 +27,7 @@ import au.com.bytecode.opencsv.CSVReader;
 
 import com.ijuru.ijambo.dao.PlayerDAO;
 import com.ijuru.ijambo.dao.WordDAO;
-import com.ijuru.ijambo.web.Listener;
+import com.mongodb.DB;
 
 /**
  * Application context
@@ -56,11 +56,23 @@ public class Context {
 	}
 	
 	/**
+	 * Initializes the database
+	 * @throws IOException if the word list could not be read
+	 */
+	public static void initDatabase(DB db) throws IOException {
+		
+		db.getCollection("players").ensureIndex("identifier");
+		
+		// Loads the word list
+		loadWordList();
+	}
+	
+	/**
 	 * Loads the wordlist from the embedded CSV
 	 * @throws IOException if the file could not be read
 	 */
 	public static void loadWordList() throws IOException {
-		InputStream words = Listener.class.getResourceAsStream(WORD_FILE);
+		InputStream words = Context.class.getResourceAsStream(WORD_FILE);
 		CSVReader reader = new CSVReader(new InputStreamReader(words));
 	    String[] nextLine;
 	    
