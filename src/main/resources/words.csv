@@ -164,7 +164,6 @@
 1916,ampule,bulb
 1930,anegise,annex
 1933,anjine,angina
-1934,anka,anchor
 1935,anketi,inquest
 1937,anteni,antenna
 1938,antereneri,coach
@@ -182,9 +181,7 @@
 2001,barafu,ice
 2004,baraje,dam
 4432,bariyeri,roadblock
-2038,beto,concrete
 2042,Bibiliya,Bible
-2044,bije,budget
 2055,bishopu,bishop
 2063,bombo,sweet
 2070,boroshete,kebab
@@ -212,7 +209,6 @@
 2276,epinari,spinach
 2277,esanse,petrol
 2278,etaje,stage
-2301,fete,party
 2305,filozofe,philosophy
 2306,firigo,fridge
 2304,firimi,film
@@ -275,7 +271,6 @@
 2093,ibuye,stone
 5609,ibwami,"royal court"
 5364,ibwiriza,instruction
-2100,ibya,testicle
 2674,ibyishimo,joy
 3151,ibyondo,mud
 2122,icapiro,"printing house"
@@ -542,7 +537,6 @@
 2605,ihundo,"ear of grain"
 2610,ihuriro,"meeting place"
 4381,ihurizo,riddle
-2617,ihwa,thorn
 2691,ijage,jug
 2693,ijambo,word
 2695,ijambobanga,password
@@ -556,7 +550,6 @@
 2709,ijoro,night
 2710,ijosi,"front of neck"
 2717,ijuru,heaven
-2718,ijwi,voice
 2730,ikabutura,shorts
 2736,ikamba,crown
 2743,ikamiyo,lorry
@@ -808,7 +801,6 @@
 3257,impwerume,"male dog"
 3258,impyiko,kidney
 3259,impyisi,hyena
-3893,imva,grave
 4500,imvange,mixture
 3903,imvubu,hippopotamus
 3907,imvugo,speech
@@ -834,8 +826,6 @@
 4429,incamake,summary
 2128,incengezi,malware
 2156,incungu,ransom
-2171,inda,lice
-2172,inda,stomach
 2175,indagihe,"present tense"
 2178,indahemuka,"faithful person"
 2181,indakemwa,perfection
@@ -917,7 +907,6 @@
 2701,injiji,"ignorant person"
 2722,injyana,tempo
 4671,injyanamuntu,extraordinary
-2728,inka,cow
 2737,inkambi,camp
 4625,inkanga,guineafowl
 4998,inkangu,mudslide
@@ -1054,7 +1043,6 @@
 3147,inzoka,snake
 3992,inzovu,elephant
 3162,inzozi,dream
-3994,inzu,house
 5384,inzungu,inheritance
 3168,ipaje,page
 3171,ipamba,cotton
@@ -1066,7 +1054,6 @@
 3194,ipata,hinge
 3195,ipatante,licence
 5601,ipera,"guava (fruit)"
-5336,ipfa,eagerness
 3217,ipfundo,knot
 4535,ipfunwe,shame
 3221,ipiki,pickaxe
@@ -1121,7 +1108,6 @@
 3473,iseseme,nausea
 3474,isesengura,analysis
 3476,isezerano,promise
-3479,isha,gazelle
 3481,ishaka,"Kaffir corn"
 5588,ishakiro,reference
 3486,ishami,branch
@@ -1134,7 +1120,6 @@
 4424,ishingwa,establishment
 3525,ishoka,axe
 4614,ishozi,nausea
-3527,ishu,cabbage
 4434,ishuheri,breeze
 3529,ishuheri,"storm of wind"
 3530,ishuka,"bed sheet"
@@ -1241,7 +1226,6 @@
 5574,jakaranda,"jacaranda (tree)"
 2698,jenoside,genocide
 2708,jokeri,joker
-2731,kafe,cafe
 2732,kagoma,"Royal eagle"
 2733,kajugujugu,helicopter
 2739,Kamena,June
@@ -1269,13 +1253,9 @@
 2847,kompanyi,company
 2859,konti,account
 2860,koperative,cooperative
-2861,kopi,copy
 2863,korali,choir
-5058,kore,glue
 5531,kudeta,"coup d'état"
-2937,Leta,state
 2940,lisiti,list
-5031,logo,logo
 2948,Madamu,Madam
 2346,maganabiri,"two hundred"
 2347,maganacyenda,"nine hundred"
@@ -1290,12 +1270,9 @@
 5484,manda,mandate
 2955,marakuja,"passion fruit"
 2957,marere,"ring finger"
-2966,Mata,April
 2967,mayibobo,"street child"
 2968,mayili,mile
-4766,meme,"little finger"
 2981,metero,metre
-5677,meya,mayor
 4456,milimetero,millimetre
 2983,milisegonda,millisecond
 2984,minisiteri,ministry
@@ -1304,19 +1281,16 @@
 2987,misiyo,mission
 5313,mitarayeze,"machine gun"
 5110,mizuzu,"fried plantains"
-2993,moto,motorcycle
 3166,mpagarike,portrait
 2994,mucagaguzi,parser
 2995,mucuranga,"audio player"
 2996,mudasobwa,computer
 2403,mugenzi,companion
 5079,mugiga,meningitis
-2729,muka,"wife of"
 3502,mushiki,"sister of a male"
 3645,musumbazose,"middle finger"
 3001,Mutarama,January
 2261,mwene,"son of"
-3005,naka,"so-and-so (male)"
 5114,negatifu,negative
 3025,njyesi,subscript
 3028,Noheli,Christmas
@@ -1344,7 +1318,6 @@
 3205,petroli,paraffin
 3198,peyizana,settlement
 3237,politiki,politics
-5268,pome,apple
 3242,porojegiteri,projector
 3265,radiyo,radio
 3284,raporo,report
@@ -1354,7 +1327,6 @@
 3316,resitora,restaurant
 4347,revorisiyo,revolution
 3345,robine,tap
-4338,roho,spirit
 5325,roketi,rocket
 5168,ronjitide,longitude
 1990,rubanda,crowd
@@ -1365,10 +1337,8 @@
 3381,rwagakoco,"mouse trap"
 5075,sakabaka,"Black Kite"
 5575,sakirirego,sacrilege
-4959,salo,salon
 4622,samusure,"crowned eagle"
 4455,santimetero,centimetre
-5743,sena,senate
 5115,seritifika,certificate
 3471,serivisi,service
 4389,serwakira,tornado
@@ -2217,9 +2187,7 @@
 1925,uwandikiwe,recipient
 2270,Uwera,"Holy One"
 5275,verisiyo,version
-3897,vino,wine
 3899,virusi,virus
 3935,Werurwe,March
-5102,wino,ink
 3954,yubile,jubilee
 3963,zahabu,gold
