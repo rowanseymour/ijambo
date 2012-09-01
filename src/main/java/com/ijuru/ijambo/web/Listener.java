@@ -27,6 +27,7 @@ import javax.servlet.ServletContextListener;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.json.simple.parser.ParseException;
 
 import com.ijuru.ijambo.Context;
 
@@ -43,7 +44,7 @@ public class Listener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent event) {	
 		log.info("Initializing Ijambo SMS");
 		
-		try {		
+		try {
 			Context.startApplication();
 		}
 		catch (UnknownHostException ex) {
@@ -51,6 +52,12 @@ public class Listener implements ServletContextListener {
 		} 
 		catch (IOException ex) {
 			log.info("Unable to load word list", ex);
+		}
+		catch (ParseException ex) {
+			log.info("Unable to parse connection URL from environment variable", ex);
+		}
+		catch (Exception ex) {
+			log.info("Unable to start application: ", ex);
 		}
 	}
 	

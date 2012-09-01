@@ -27,6 +27,10 @@ import java.util.Map;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -35,6 +39,7 @@ import com.ijuru.ijambo.dao.PlayerDAO;
 import com.ijuru.ijambo.dao.WordDAO;
 import com.mongodb.DB;
 import com.mongodb.Mongo;
+import com.mongodb.MongoURI;
 
 /**
  * Application context
@@ -44,7 +49,6 @@ public class Context {
 	protected static final Logger log = LogManager.getLogger(Context.class);
 	
 	private static final String WORD_FILE = "/words.csv";
-	private static final String DB_NAME = "ijambo-sms";
 	
 	private static Mongo m;
 	private static WordDAO wordDAO;
@@ -69,15 +73,15 @@ public class Context {
 	/**
 	 * Initializes the application
 	 * @throws IOException if the word list could not be read
+	 * @throws ParseException if JSON env variable could not be read
 	 */
-	public static void startApplication() throws IOException, UnknownHostException {		
-		m = new Mongo();
+	public static void startApplication() throws IOException, UnknownHostException, ParseException {		
 		
-		DB db = m.getDB(DB_NAME);
+		DB db = connectDatabase();
 		db.getCollection("players").ensureIndex("identifier");
 		
-		Context.setWordDAO(new WordDAO(db));
-		Context.setPlayerDAO(new PlayerDAO(db));
+		wordDAO = new WordDAO(db);
+		playerDAO = new PlayerDAO(db);
 		
 		// Loads the word list
 		loadWordList();
@@ -90,10 +94,47 @@ public class Context {
 	}
 	
 	/**
+	 * Connects to the database
+	 * @return the Mongo DB
+	 * @throws ParseException
+	 * @throws UnknownHostException
+	 */
+	public static DB connectDatabase() throws ParseException, UnknownHostException {
+		
+		// Check for AppFog environment
+		String appFogEnv = System.getenv("VCAP_SERVICES");
+
+		if (appFogEnv != null) {	
+			// Connect to MongoDB as AppFog service
+			JSONParser parser = new JSONParser();
+			JSONObject svcs = (JSONObject)parser.parse(appFogEnv);
+			JSONArray mongoSettings = (JSONArray)svcs.get("mongodb-1.8");
+			JSONObject mongoSettings0 = (JSONObject)mongoSettings.get(0);
+			JSONObject mongoCreds0 = (JSONObject)mongoSettings0.get("credentials");
+			//String db = (String)mongoCreds0.get("db");
+			String connectionURL = (String)mongoCreds0.get("url");
+			
+			log.info("Running as AppFog instance with connection URL: " + connectionURL);
+			
+			DB db = new MongoURI(connectionURL).connectDB();
+			
+			// https://jira.mongodb.org/browse/JAVA-436
+			db.authenticate((String)mongoCreds0.get("username"), ((String)mongoCreds0.get("password")).toCharArray());
+			
+			return db;
+		}
+		
+		// Create default MongoDB instance
+		m = new Mongo();
+		return m.getDB("ijambo");
+	}
+	
+	/**
 	 * Destroys the application
 	 */
 	public static void destroyApplication() {
-		m.close();
+		if (m != null)
+			m.close();
 	}
 	
 	/**
@@ -116,21 +157,5 @@ public class Context {
 	    }
 	    
 	    reader.close();
-	}
-
-	/**
-	 * Sets the word DAO
-	 * @param wordDAO the word DAO
-	 */
-	public static void setWordDAO(WordDAO wordDAO) {
-		Context.wordDAO = wordDAO;
-	}
-
-	/**
-	 * Sets the player DAO
-	 * @param playerDAO the player DAO
-	 */
-	public static void setPlayerDAO(PlayerDAO playerDAO) {
-		Context.playerDAO = playerDAO;
 	}
 }
